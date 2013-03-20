@@ -11,7 +11,7 @@
     <!-- Properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.mainclass>main.de.diemex.nff.NoFriendlyFire</project.mainclass>
+        <project.mainclass>de.diemex.nff.NoFriendlyFire</project.mainclass>
         <outputdir>${project.build.outputDirectory}/out</outputdir>
         <mc-version>1.4.7</mc-version>
         <bukkit-ver>R1.0</bukkit-ver>
