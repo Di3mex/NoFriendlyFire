@@ -1,14 +1,5 @@
-name: NoFriendlyFire
-main: de.diemex.no.friendlyfire.NoFriendlyFire
-version: 0.2
-permissions:
-  nofriendlyire.team1:
-    default: false
-  nofriendlyire.team2:
-    default: false
-  nofriendlyire.team3:
-    default: false
-  nofriendlyire.team4:
-    default: false
-  nofriendlyire.team5:
-    default: false
+name: ${project.artifactId}
+main: ${project.mainclass}
+version: ${project.version}
+description: ${project.description}
+dev-url: ${project.url}
