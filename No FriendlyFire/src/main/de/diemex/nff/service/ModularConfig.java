@@ -15,11 +15,17 @@
 package de.diemex.nff.service;
 
 import de.diemex.nff.NoFriendlyFire;
+import de.diemex.nff.Team;
+import de.diemex.nff.config.NFFNode;
+import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import javax.print.DocFlavor;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -87,10 +93,112 @@ public abstract class ModularConfig extends NFFModule
                 OPTIONS.put(node, config.getBoolean(node.getPath(), (Boolean) node.getDefaultValue()));
                 break;
             }
+            case TEAM_LIST:
+            {
+                ArrayList<Team> teams = new ArrayList<Team>();
+                ConfigurationSection section = config.getConfigurationSection(node.getPath());
+                Map mapo = section.getValues(true);
+
+                Iterator iter = mapo.entrySet().iterator();
+                while (iter.hasNext())
+                {
+                    Team myTeam = new Team();
+                    Map.Entry <String, Object> pair = (Map.Entry<String, Object>) iter.next();
+                    String path = pair.getKey();
+                    Object value = pair.getValue();
+                    if (value instanceof ConfigurationSection)
+                    {
+                        ConfigurationSection colorSection = (ConfigurationSection) value;
+                        //Parse the color
+                        {
+                            String colorStr = colorSection.getString("Color");
+                            colorStr = colorStr.replace("#", "");
+                            colorStr = colorStr.replaceAll("[^0-9A-Fa-f]", "0");//replace everything which isn't a valid hex symbol
+                            //we need a length of 6
+                            for (int i = colorStr.length(); i < 6; i++)
+                                colorStr+="0"; //not efficient, you got a better solution? go ahead...
+                            int red = Integer.parseInt(colorStr.substring(0, 2), 16);
+                            int green = Integer.parseInt(colorStr.substring(2, 4), 16);
+                            int blue = Integer.parseInt(colorStr.substring(4, 6), 16);
+                            Color color = Color.fromRGB(red, green, blue);
+                            myTeam.setColor(color);
+                        }
+                        myTeam.setName(path);
+                        teams.add(myTeam);
+                    }
+                }
+                //Teams empty? load defaults...
+                if (teams.size() < 1)
+                    teams = (ArrayList) node.getDefaultValue();
+
+                OPTIONS.put(node, teams);
+                break;
+            }
             default:
             {
                 OPTIONS.put(node, config.get(node.getPath(), node.getDefaultValue()));
             }
+        }
+    }
+
+    /**
+     * Rewrites the config based on the validated values which are in memory
+     */
+    public void cleanRewrite()
+    {
+        FileConfiguration config = new YamlConfiguration();
+        Set <Map.Entry<ConfigNode, Object>> nodes = OPTIONS.entrySet();
+        for (Map.Entry<ConfigNode, Object> entry : nodes)
+        {
+            ConfigNode node = entry.getKey();
+            switch (node.getVarType())
+            {
+                case BOOLEAN:
+                {
+                    config.set(node.getPath(), getBoolean(node));
+                    break;
+                }
+                case STRING:
+                {
+                    config.set(node.getPath(), getString(node));
+                    break;
+                }
+                case INTEGER:
+                {
+                    config.set(node.getPath(), getInt(node));
+                    break;
+                }
+                case DOUBLE:
+                {
+                    config.set(node.getPath(), getDouble(node));
+                    break;
+                }
+                case LIST:
+                {
+                    config.set(node.getPath(), getStringList(node));
+                    break;
+                }
+                case TEAM_LIST:
+                {
+                    ArrayList<Team> teams = getTeams(node);
+                    for (Team team : teams)
+                    {
+                        String hexColor = String.format("#%06X", (0xFFFFFF & team.getColor().asRGB()));
+                        config.set(NFFNode.TEAMS.getPath() + "." + team.getName() + ".Color", hexColor);
+                    }
+                }
+                default:
+                {
+                    break;
+                }
+            }
+        }
+        try
+        {
+            config.save(new File(plugin.getDataFolder() + File.separator + "config.yml"));
+        } catch (IOException e)
+        {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
 
@@ -260,6 +368,29 @@ public abstract class ModularConfig extends NFFModule
             }
         }
         return b;
+    }
+
+    /**
+     * Get the ArrayList of Teams
+     * @param node
+     * @return
+     */
+    public ArrayList<Team> getTeams(final ConfigNode node)
+    {
+        ArrayList<Team> teams = new ArrayList<Team>();
+        switch (node.getVarType())
+        {
+            case TEAM_LIST:
+            {
+                teams = (ArrayList<Team>) OPTIONS.get(node);
+                break;
+            }
+            default:
+            {
+                throw new IllegalArgumentException("Attempted to get " + node.toString() + " of type " + node.getVarType() + " as a boolean.");
+            }
+        }
+        return teams;
     }
 
     /**

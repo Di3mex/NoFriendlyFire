@@ -16,19 +16,26 @@ package de.diemex.nff.config;
 
 
 import de.diemex.nff.NoFriendlyFire;
+import de.diemex.nff.Team;
+import de.diemex.nff.service.ConfigNode;
 import de.diemex.nff.service.ModularConfig;
+import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemorySection;
+import org.bukkit.configuration.file.FileConfiguration;
+
+import java.util.ArrayList;
 
 /**
- * Configuration handler for the root config.yml file.
+ * Configuration handler for the config.yml file.
  */
-public class NffCfg extends ModularConfig
+public class NFFCfg extends ModularConfig
 {
-
+    private Team[] teams;
     /**
      * @param plugin - plugin instance.
      */
-    public NffCfg(NoFriendlyFire plugin)
+    public NFFCfg(NoFriendlyFire plugin)
     {
         super(plugin);
     }
@@ -68,12 +75,13 @@ public class NffCfg extends ModularConfig
         plugin.reloadConfig();
         loadSettings(plugin.getConfig());
         boundsCheck();
+        cleanRewrite();
     }
 
     @Override
     public void loadSettings(ConfigurationSection config)
     {
-        for (final NffNodes node : NffNodes.values())
+        for (final NFFNode node : NFFNode.values())
         {
             updateOption(node);
         }
@@ -82,11 +90,29 @@ public class NffCfg extends ModularConfig
     @Override
     public void loadDefaults(ConfigurationSection config)
     {
-        for (NffNodes node : NffNodes.values())
+        for (NFFNode node : NFFNode.values())
         {
-            if (!config.contains(node.getPath()))
+            //Team specific
+            Object obj = config.get(node.getPath());
+            MemorySection section = null;
+            if (obj instanceof MemorySection)
+                section = (MemorySection) obj;
+
+            //General
+            if (!config.contains(node.getPath()) && node.getVarType() != ConfigNode.VarType.TEAM_LIST)
             {
                 config.set(node.getPath(), node.getDefaultValue());
+            }
+            //Team specific
+            else if ((obj == null || section != null && section.getValues(true).size() == 0) && node.getVarType() == ConfigNode.VarType.TEAM_LIST)
+            {
+                //Write the name & color of all teams to the cfg
+                ArrayList<Team> teams = (ArrayList) node.getDefaultValue();
+                for (Team team : teams)
+                {
+                    String hexColor = String.format("#%06X", (0xFFFFFF & team.getColor().asRGB()));
+                    config.set(NFFNode.TEAMS.getPath() + "." + team.getName() + ".Color", hexColor);
+                }
             }
         }
     }

@@ -51,7 +51,7 @@ public interface ConfigNode
         DOUBLE,
         BOOLEAN,
         LIST,
-        DYNAMIC
+        TEAM_LIST
     }
 
     /**

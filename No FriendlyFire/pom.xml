@@ -35,6 +35,10 @@
             <id>powermock-repo</id>
             <url>http://powermock.googlecode.com/svn/repo/</url>
         </repository>
+        <repository>
+            <id>TagAPI</id>
+            <url>http://repo.kitteh.org/content/repositories/public/</url>
+        </repository>
     </repositories>
     <!-- Dependencies -->
     <dependencies>
@@ -42,6 +46,12 @@
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>${mc-version}-${bukkit-ver}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.kitteh</groupId>
+            <artifactId>tagapi</artifactId>
+            <version>2.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -56,6 +66,24 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>1.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-core</artifactId>
+            <version>1.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>1.5</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <!-- Build instructions -->
     <build>
@@ -67,6 +95,7 @@
             <resource>
                 <includes>
                     <include>plugin.yml</include>
+                    <include>config.yml</include>
                 </includes>
                 <directory>${basedir}</directory>
                 <filtering>true</filtering>
