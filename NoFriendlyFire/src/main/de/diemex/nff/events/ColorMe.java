@@ -4,11 +4,13 @@ import de.diemex.nff.NoFriendlyFire;
 import de.diemex.nff.Team;
 import de.diemex.nff.TeamMethods;
 import de.diemex.nff.config.NFFCfg;
-import org.bukkit.Color;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.kitteh.tag.PlayerReceiveNameTagEvent;
+
+import java.util.ArrayList;
 
 /**
  * Color the name above a players head
@@ -41,10 +43,10 @@ public class ColorMe implements Listener
     public void onNameTag(PlayerReceiveNameTagEvent event) {
         TeamMethods teams = plugin.getModuleForClass(TeamMethods.class);
         Player player = event.getNamedPlayer();
-        Team team = teams.getTeam(player);
-        if (team != null &! team.getColor().equals(Color.WHITE))
+        ArrayList<Team> team = teams.getTeams(player);
+        if (team.size() > 0 &! team.get(0).getColor().name().equals(ChatColor.WHITE.name()))
         {
-            event.setTag(team.getColor() + player.getName());
+            event.setTag(team.get(0).getColor() + player.getName());
         }
     }
 }

@@ -1,5 +1,6 @@
 package de.diemex.nff;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 
 /**
@@ -14,13 +15,13 @@ public class Team
 {
     private String name = "";
     private String permission = ""; //Permission name based on the name of the Team
-    private Color color = Color.WHITE;
+    private ChatColor color = ChatColor.WHITE;
 
     private final String PREFIX = "nofriendlyfire.";
 
     public Team (/*Empty Constructor*/){};
 
-    public Team( String name, Color color)
+    public Team( String name, ChatColor color)
     {
         this.name = name;
         this.color = color;
@@ -48,12 +49,12 @@ public class Team
         this.name = name;
     }
 
-    public Color getColor()
+    public ChatColor getColor()
     {
         return color;
     }
 
-    public void setColor(Color color)
+    public void setColor(ChatColor color)
     {
         this.color = color;
     }

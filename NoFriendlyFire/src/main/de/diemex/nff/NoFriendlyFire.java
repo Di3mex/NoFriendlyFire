@@ -18,16 +18,20 @@
 package de.diemex.nff;
 
 import de.diemex.nff.config.NFFCfg;
+import de.diemex.nff.config.NFFNode;
 import de.diemex.nff.events.ColorMe;
 import de.diemex.nff.events.PlayerDamageEvents;
 import de.diemex.nff.service.IModule;
 import org.bukkit.event.Listener;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kitteh.tag.TagAPI;
 
 import javax.swing.text.html.HTML;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +50,7 @@ public class NoFriendlyFire extends JavaPlugin implements Listener
 	public void onEnable()
 	{
         super.onEnable();
-        //Modules before eventlisteners, because the listeners require some of the modules
+        //Modules before EventListeners, because the listeners require some of the modules
         registerModule(NFFCfg.class, new NFFCfg(this));
         registerModule(TeamMethods.class, new TeamMethods(this));
         PluginManager pm = getServer().getPluginManager();
@@ -55,9 +59,14 @@ public class NoFriendlyFire extends JavaPlugin implements Listener
         Plugin tagAPI = pm.getPlugin("TagAPI");
         if (tagAPI != null && tagAPI instanceof TagAPI)
             pm.registerEvents(new ColorMe(this), this);
-
-
+        //Register all perms with default to none, so Ops don't have all Teams by default
         cfg = getModuleForClass(NFFCfg.class);
+        ArrayList<Team> teams = cfg.getTeams(NFFNode.TEAMS);
+        for (Team team : teams)
+        {
+            Permission perm = new Permission(team.getPermission(), PermissionDefault.FALSE);
+            pm.addPermission(perm);
+        }
 	}
 
 

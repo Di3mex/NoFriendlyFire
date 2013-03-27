@@ -2,7 +2,7 @@ package de.diemex.nff.config;
 
 import de.diemex.nff.Team;
 import de.diemex.nff.service.ConfigNode;
-import org.bukkit.Color;
+import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 
@@ -57,11 +57,11 @@ public enum NFFNode implements ConfigNode
         public DefaultTeams()
         {
             super();
-            this.add(new Team("team1", Color.WHITE));
-            this.add(new Team("team2", Color.WHITE));
-            this.add(new Team("team3", Color.WHITE));
-            this.add(new Team("team4", Color.WHITE));
-            this.add(new Team("team5", Color.WHITE));
+            this.add(new Team("team1", ChatColor.WHITE));
+            this.add(new Team("team2", ChatColor.WHITE));
+            this.add(new Team("team3", ChatColor.WHITE));
+            this.add(new Team("team4", ChatColor.WHITE));
+            this.add(new Team("team5", ChatColor.WHITE));
         }
     }
 }

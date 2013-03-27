@@ -24,34 +24,40 @@ public class TeamMethods extends NFFModule
 
     public boolean areOnSameTeam (Player damager, Player damagee)
     {
-        Team teamDamager = getTeam(damager);
-        Team teamDamagee = getTeam(damagee);
+        ArrayList<Team> teamDamager = getTeams(damager);
+        ArrayList<Team> teamDamagee = getTeams(damagee);
+
+        boolean sameTeam = false;
 
         if (teamDamager != null && teamDamagee != null)
         {
+            for (Team team : teamDamager)
+            {
+                sameTeam = teamDamagee.contains(team);
+                if (sameTeam) break;
+            }
             return teamDamager.equals(teamDamagee);
         }
 
-        return false;
+        return sameTeam;
     }
 
     /**
      * Gets the team a player is on
      */
-    public Team getTeam (Player player)
+    public ArrayList<Team> getTeams (Player player)
     {
         final ArrayList<Team> teams = cfg.getTeams(NFFNode.TEAMS);
-        Team playerTeam = null;
+        ArrayList<Team> playerTeams = new ArrayList<Team>();
 
         for (Team team : teams)
         {
             if (player.hasPermission(team.getPermission()))
             {
-                playerTeam = team;
-                break;
+                playerTeams.add(team);
             }
         }
-        return playerTeam;
+        return playerTeams;
     }
 
     @Override

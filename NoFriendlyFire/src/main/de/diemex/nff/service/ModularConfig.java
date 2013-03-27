@@ -17,6 +17,7 @@ package de.diemex.nff.service;
 import de.diemex.nff.NoFriendlyFire;
 import de.diemex.nff.Team;
 import de.diemex.nff.config.NFFNode;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -112,16 +113,15 @@ public abstract class ModularConfig extends NFFModule
                         //Parse the color
                         {
                             String colorStr = colorSection.getString("Color");
-                            colorStr = colorStr.replace("#", "");
-                            colorStr = colorStr.replaceAll("[^0-9A-Fa-f]", "0");//replace everything which isn't a valid hex symbol
-                            //we need a length of 6
-                            for (int i = colorStr.length(); i < 6; i++)
-                                colorStr+="0"; //not efficient, you got a better solution? go ahead...
-                            int red = Integer.parseInt(colorStr.substring(0, 2), 16);
-                            int green = Integer.parseInt(colorStr.substring(2, 4), 16);
-                            int blue = Integer.parseInt(colorStr.substring(4, 6), 16);
-                            Color color = Color.fromRGB(red, green, blue);
-                            myTeam.setColor(color);
+                            boolean contains = false;
+                            for (ChatColor color : ChatColor.values())
+                            {
+                                String name = color.name();
+                                contains = name.equals(colorStr);
+                                if (contains) break;
+                            }
+                            if (contains)
+                                myTeam.setColor(ChatColor.valueOf(colorStr));
                         }
                         myTeam.setName(path);
                         teams.add(myTeam);
@@ -183,8 +183,7 @@ public abstract class ModularConfig extends NFFModule
                     ArrayList<Team> teams = getTeams(node);
                     for (Team team : teams)
                     {
-                        String hexColor = String.format("#%06X", (0xFFFFFF & team.getColor().asRGB()));
-                        config.set(NFFNode.TEAMS.getPath() + "." + team.getName() + ".Color", hexColor);
+                        config.set(NFFNode.TEAMS.getPath() + "." + team.getName() + ".Color", team.getColor().name());
                     }
                 }
                 default:

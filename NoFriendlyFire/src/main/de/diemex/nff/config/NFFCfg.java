@@ -19,10 +19,8 @@ import de.diemex.nff.NoFriendlyFire;
 import de.diemex.nff.Team;
 import de.diemex.nff.service.ConfigNode;
 import de.diemex.nff.service.ModularConfig;
-import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 
@@ -76,6 +74,7 @@ public class NFFCfg extends ModularConfig
         loadSettings(plugin.getConfig());
         boundsCheck();
         cleanRewrite();
+        plugin.reloadConfig();
     }
 
     @Override
@@ -103,15 +102,15 @@ public class NFFCfg extends ModularConfig
             {
                 config.set(node.getPath(), node.getDefaultValue());
             }
-            //Team specific
+
+            //Team specific, empty list
             else if ((obj == null || section != null && section.getValues(true).size() == 0) && node.getVarType() == ConfigNode.VarType.TEAM_LIST)
             {
                 //Write the name & color of all teams to the cfg
                 ArrayList<Team> teams = (ArrayList) node.getDefaultValue();
                 for (Team team : teams)
                 {
-                    String hexColor = String.format("#%06X", (0xFFFFFF & team.getColor().asRGB()));
-                    config.set(NFFNode.TEAMS.getPath() + "." + team.getName() + ".Color", hexColor);
+                    config.set(NFFNode.TEAMS.getPath() + "." + team.getName() + ".Color", team.getColor().name());
                 }
             }
         }
