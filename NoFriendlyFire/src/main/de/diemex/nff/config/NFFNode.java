@@ -11,6 +11,16 @@ import java.util.ArrayList;
  */
 public enum NFFNode implements ConfigNode
 {
+    BLOCK_SUICIDE
+            ("NoFriendlyFire.Block.Suicide", VarType.BOOLEAN, false),
+    BLOCK_MELEE
+            ("NoFriendlyFire.Block.Melee", VarType.BOOLEAN, true),
+    BLOCK_ARROWS
+            ("NoFriendlyFire.Block.Arrows", VarType.BOOLEAN, true),
+    BLOCK_SNOWBALLS
+            ("NoFriendlyFire.Block.Snowballs", VarType.BOOLEAN, true),
+    BLOCK_POTIONS
+            ("NoFriendlyFire.Block.Potions", VarType.BOOLEAN, true),
     TEAMDMG_MSG_SHOW
             ("NoFriendlyFire.FriendlyFireMsg.Show", VarType.BOOLEAN, true),
     TEAMDMG_MSG

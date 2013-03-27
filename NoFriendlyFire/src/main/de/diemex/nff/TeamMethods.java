@@ -36,7 +36,6 @@ public class TeamMethods extends NFFModule
                 sameTeam = teamDamagee.contains(team);
                 if (sameTeam) break;
             }
-            return teamDamager.equals(teamDamagee);
         }
 
         return sameTeam;

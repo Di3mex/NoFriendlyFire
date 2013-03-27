@@ -44,7 +44,7 @@ public class ColorMe implements Listener
         TeamMethods teams = plugin.getModuleForClass(TeamMethods.class);
         Player player = event.getNamedPlayer();
         ArrayList<Team> team = teams.getTeams(player);
-        if (team.size() > 0 &! team.get(0).getColor().name().equals(ChatColor.WHITE.name()))
+        if (team != null &&! team.isEmpty() &&! team.get(0).getColor().name().equals(ChatColor.WHITE.name()))
         {
             event.setTag(team.get(0).getColor() + player.getName());
         }
