@@ -17,6 +17,7 @@
  */
 package de.diemex.nff;
 
+import de.diemex.nff.command.Commander;
 import de.diemex.nff.config.NFFCfg;
 import de.diemex.nff.config.NFFNode;
 import de.diemex.nff.events.ColorMe;
@@ -29,6 +30,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kitteh.tag.TagAPI;
+import org.omg.IOP.TAG_ALTERNATE_IIOP_ADDRESS;
 
 import javax.swing.text.html.HTML;
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public class NoFriendlyFire extends JavaPlugin implements Listener
      * Registered modules.
      */
     private final Map<Class<? extends IModule>, IModule> modules = new HashMap<Class<? extends IModule>, IModule>();
+    private static final String TAG = "[NFF]";
     /**
      * Config instance
      */
@@ -54,11 +57,13 @@ public class NoFriendlyFire extends JavaPlugin implements Listener
         registerModule(NFFCfg.class, new NFFCfg(this));
         registerModule(TeamMethods.class, new TeamMethods(this));
         PluginManager pm = getServer().getPluginManager();
+
         //EventListeners
         pm.registerEvents(new PlayerDamageEvents(this), this);
         Plugin tagAPI = pm.getPlugin("TagAPI");
         if (tagAPI != null && tagAPI instanceof TagAPI)
             pm.registerEvents(new ColorMe(this), this);
+
         //Register all perms with default to none, so Ops don't have all Teams by default
         cfg = getModuleForClass(NFFCfg.class);
         ArrayList<Team> teams = cfg.getTeams(NFFNode.TEAMS);
@@ -67,8 +72,15 @@ public class NoFriendlyFire extends JavaPlugin implements Listener
             Permission perm = new Permission(team.getPermission(), PermissionDefault.FALSE);
             pm.addPermission(perm);
         }
+
+        //Register Commands
+        getCommand("nff").setExecutor(new Commander(this));
 	}
 
+    public String getTag ()
+    {
+        return TAG;
+    }
 
     /*
      * Modules

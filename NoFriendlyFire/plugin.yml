@@ -3,3 +3,14 @@ main: ${project.mainclass}
 version: ${project.version}
 description: ${project.description}
 dev-url: ${project.url}
+softdepend: [TagAPI]
+commands:
+    nff:
+        description: root command for NoFriendlyFire
+        usage: /nff - Show the main menu
+permissions:
+    nofriendlyfire.admin:
+        description: gives access to commands like reload
+        default: op
+    #All the permissions for the teams are assigned dynamically from the config and default to none.
+    #for example: nofriendlyfire.teamname, nofriendlyfire.attackers
