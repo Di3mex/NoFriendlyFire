@@ -5,6 +5,7 @@ import de.diemex.nff.Team;
 import de.diemex.nff.config.NFFCfg;
 import de.diemex.nff.config.NFFNode;
 import de.diemex.nff.service.ICommand;
+import de.diemex.nff.service.PermissionNode;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,42 +13,40 @@ import java.util.ArrayList;
 
 
 /**
- * Teams command.
+ * List all Teams
  */
 public class TeamsCommand implements ICommand
 {
+    @Override
+    public boolean execute(NoFriendlyFire plugin, CommandSender sender, Command command, String label, String[] args)
+    {
+        if (sender.hasPermission(PermissionNode.ADMIN.getNode()))
+        {
 
+            NFFCfg cfg = plugin.getModuleForClass(NFFCfg.class);
 
+            final ArrayList<Team> teams = cfg.getTeams(NFFNode.TEAMS);
 
-   @Override
-	    public boolean execute(NoFriendlyFire plugin, CommandSender sender, Command command, String label, String[] args)
-	    {
-		 	if (sender.hasPermission("nofriendlyfire." + "teams"))
-		 	{
-		 
-		 		NFFCfg cfg = plugin.getModuleForClass(NFFCfg.class);
-		 		cfg.closing();
-		 		cfg.starting();
-	        	
-		 		final ArrayList<Team> teams = cfg.getTeams(NFFNode.TEAMS);
-		 		
-		 		for (Team team : teams)
-		 		{  	
-		 			
-		 			ChatColor ccolor = team.getColor();
-		 			String scolor = ccolor.name();
-		 			String teamname = team.getName(); 
-		 			sender.sendMessage(plugin.getTag() + teamname + " color is " + ccolor + scolor);
-        	
-		 		}
+            StringBuilder builder = new StringBuilder();
 
-		 		return true;
-		 	}else
-		 	{
-		 		
-		 		sender.sendMessage(ChatColor.RED + plugin.getTag() + " You do not have acces to that command!");
-		 		return true;
-		 	}
-	    }	
-	
+            for (Team team : teams)
+            {
+                if (builder.length() != 0) //not first iteration
+                {
+                    builder.append(", ");
+                }
+                builder.append(team.getColor());
+                builder.append(team.getName());
+            }
+
+            sender.sendMessage(plugin.getTag() + builder.toString());
+
+            return true;
+        }else
+        {
+
+            sender.sendMessage(ChatColor.RED + plugin.getTag() + " You do not have acces to that command!");
+            return true;
+        }
+    }
 }
