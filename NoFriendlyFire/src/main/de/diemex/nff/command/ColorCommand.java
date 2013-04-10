@@ -19,7 +19,7 @@ import org.bukkit.command.CommandSender;
 public class ColorCommand implements ICommand
 {
 
-  
+
 	 @Override
 	    public boolean execute(NoFriendlyFire plugin, CommandSender sender, Command command, String label, String[] args)
 	    {
@@ -49,12 +49,12 @@ public class ColorCommand implements ICommand
 	        		
 	        	}
 	        	sender.sendMessage(ChatColor.RED + plugin.getTag() + " This team is not created!");
-	 			return true;
-	        }else
-	        {
-	        	sender.sendMessage(ChatColor.RED + plugin.getTag() + " You are not admin!");
-	        	return true;
 	        }
+            else
+            {
+                sender.sendMessage(ChatColor.RED + plugin.getTag() + " Lack permission: " + PermissionNode.ADMIN.getNode());
+            }
+            return true;
 	    }
 	 
 	

@@ -41,12 +41,11 @@ public class TeamsCommand implements ICommand
 
             sender.sendMessage(plugin.getTag() + builder.toString());
 
-            return true;
-        }else
-        {
-
-            sender.sendMessage(ChatColor.RED + plugin.getTag() + " You do not have acces to that command!");
-            return true;
         }
+        else
+        {
+            sender.sendMessage(ChatColor.RED + plugin.getTag() + " Lack permission: " + PermissionNode.ADMIN.getNode());
+        }
+        return true;
     }
 }

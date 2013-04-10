@@ -8,6 +8,15 @@ commands:
     nff:
         description: root command for NoFriendlyFire
         usage: /nff - Show the main menu
+    nff add:
+        description: add a team
+        usage: /nff add teamname color
+    nff remove:
+        description: remove a team
+        usage: /nff remove teamname
+    nff teams:
+        description: list all teams with color
+        usage: /nff teams
 permissions:
     nofriendlyfire.admin:
         description: gives access to commands like reload

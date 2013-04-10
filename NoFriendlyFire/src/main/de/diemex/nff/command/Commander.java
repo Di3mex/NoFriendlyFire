@@ -30,10 +30,13 @@ public class Commander extends CommandHandler
     {
         sender.sendMessage(ChatColor.GRAY + "========= " + ChatColor.RED + plugin.getName() + ChatColor.GRAY + " =========");
         sender.sendMessage(" /nff");
-        sender.sendMessage("    help" + ChatColor.YELLOW + " - Show the help menu");
         if (sender.hasPermission(PermissionNode.ADMIN.getNode()))
-        {
-            sender.sendMessage("    reload " + ChatColor.YELLOW + "- Reload the plugin");
+        {//TODO why is it not in colums?! dafuq
+            sender.sendMessage("    reload   " + ChatColor.YELLOW + "- Reload the plugin");
+            sender.sendMessage("    teams    " + ChatColor.YELLOW + "- List all teams");
+            sender.sendMessage("    add      " + ChatColor.YELLOW + "- [team] [color]");
+            sender.sendMessage("    remove   " + ChatColor.YELLOW + "- [team]");
+            sender.sendMessage("    color    " + ChatColor.YELLOW + "- [team] [color]");
         }
         return true;
     }

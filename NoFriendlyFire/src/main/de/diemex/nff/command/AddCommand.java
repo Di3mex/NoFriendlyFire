@@ -50,12 +50,12 @@ public class AddCommand implements ICommand
 	        	cfg.closing();
 	        	cfg.starting();
 	        	sender.sendMessage(ChatColor.GREEN + plugin.getTag() + " Team is created!");
-	        	return true;
-	        }else
-	        {
-	        	sender.sendMessage(ChatColor.RED + plugin.getTag() + " You are not admin!");
-	        	return true;
 	        }
+            else
+            {
+                sender.sendMessage(ChatColor.RED + plugin.getTag() + " Lack permission: " + PermissionNode.ADMIN.getNode());
+            }
+            return true;
 	    }
 	 
 	

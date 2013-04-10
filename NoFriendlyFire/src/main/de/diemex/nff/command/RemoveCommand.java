@@ -49,13 +49,13 @@ public class RemoveCommand implements ICommand
 		 		}
 		 		
 	 			sender.sendMessage(ChatColor.RED + plugin.getTag() + " This team is not created!");
-	 			return true;
-	 			
-	        }else
-	        {
-	        	sender.sendMessage(ChatColor.RED + plugin.getTag() + " You are not admin!");
-	        	return true;
+
 	        }
+            else
+            {
+                sender.sendMessage(ChatColor.RED + plugin.getTag() + " Lack permission: " + PermissionNode.ADMIN.getNode());
+            }
+            return true;
 	        	
 	    }
 	
