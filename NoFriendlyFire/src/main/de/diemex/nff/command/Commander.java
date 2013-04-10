@@ -19,6 +19,10 @@ public class Commander extends CommandHandler
         super(plugin, "nff");
         this.plugin = plugin;
         registerCommand("reload", new ReloadCommand());
+        registerCommand("teams", new TeamsCommand());
+        registerCommand("add", new AddCommand());
+        registerCommand("remove", new RemoveCommand());
+        registerCommand("color", new ColorCommand());
     }
 
     @Override
